@@ -1,19 +1,26 @@
 import React from 'react';
 import axios from "axios";
 import useForm from '../../customHooks/useForm';
+import ErrorModal from '../../components/modal/ErrorModal';
 
-const Login: React.FC = () => {
+interface BBB{
+    setModal: (modal: boolean) => void;
+}
+
+const Login: React.FC<BBB> = ({setModal}) => {
 
     const onSubmit = async() => {
         try {
             const response = await axios.post("http://localhost:3001/api/login", {...formHook.formValues});
             if(!response){
+                setModal(true);
                 throw new Error("error");
             }
             console.log(response.data);
             return response.data;
         } 
         catch (error: any) {
+            setModal(true);
             console.error(error.message);
         }
     }
