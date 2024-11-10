@@ -6,7 +6,7 @@ export const getUsers = async (req: Request, res: Response, next: NextFunction):
         const users: IUser[] = await userModel.find();
         if(!users)
             throw new Error("users not founded");
-        res.json({users: users});
+        res.json({data: users});
     } 
     catch (error) {
         next(error);

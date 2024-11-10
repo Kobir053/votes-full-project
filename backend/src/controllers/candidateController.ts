@@ -6,7 +6,7 @@ export const getCandidates = async (req: Request, res: Response, next: NextFunct
         const candidates: ICandidate[] = await candidateModel.find();
         if(!candidates)
             throw new Error("candidates didn't found");
-        res.json({candidates});
+        res.json({data: candidates});
     } 
     catch (error: any) {
         next(error);

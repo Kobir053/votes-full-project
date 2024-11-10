@@ -6,11 +6,6 @@ export class AuthService {
 
   static async register(username: string, password: string): Promise<IUser> {
 
-    const existingUser = await userModel.findOne({username: username});
-    if (existingUser) {
-      throw new Error("Username already exists");
-    }
-
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser: IUser = await userModel.create({username, password: hashedPassword});
     return newUser;

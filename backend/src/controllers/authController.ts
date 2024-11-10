@@ -31,7 +31,7 @@ export const handleLogin = async (req: Request, res: Response, next: NextFunctio
         { expiresIn: '24h' }
       );
   
-      res.json({ token });
+      res.json({token: token });
     } 
     catch (error: any) {
       res.status(401).json({ message: 'Invalid credentials ' + error.message });
