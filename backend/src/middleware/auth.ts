@@ -4,7 +4,7 @@ import { config } from '../config';
 
 export const authWithBearer = (req: Request, res: Response, next: NextFunction): void => {
   try {
-    const authHeader = req.headers.authorization;
+    const authHeader = req.body.token;
     if (!authHeader) {
       res.status(401).json({ message: 'No token provided' });
       return;

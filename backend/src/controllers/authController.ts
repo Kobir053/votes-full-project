@@ -11,7 +11,7 @@ export const handleRegister = async (req: Request, res: Response, next: NextFunc
         res.status(400).json({ message: 'Username and password are required' });
         return;
       }
-  
+
       const user = await AuthService.register(username, password);
       res.status(201).json({ message: 'User registered successfully', userId: user._id });
     } 
@@ -33,7 +33,7 @@ export const handleLogin = async (req: Request, res: Response, next: NextFunctio
   
       res.json({ token });
     } 
-    catch (error) {
-      res.status(401).json({ message: 'Invalid credentials' });
+    catch (error: any) {
+      res.status(401).json({ message: 'Invalid credentials ' + error.message });
     }
 }

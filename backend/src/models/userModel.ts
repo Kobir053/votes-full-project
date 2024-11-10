@@ -20,7 +20,6 @@ const userSchema = new Schema<IUser>({
     password: {
         type: String,
         required: [true, "you must have a password"],
-        maxlength: [10, "length of password can't be more than 10 charachters"],
         minlength: [2, "length of password must be more than 2 charachters"]
     },
     hasVoted: {

@@ -1,37 +1,30 @@
-import { User } from "../types/user";
 import bcrypt from "bcrypt";
+import userModel, { IUser } from "../models/userModel";
 
-// Mock database
-let users: User[] = [];
-let nextId = 1;
 
 export class AuthService {
 
-  static async register(username: string, password: string): Promise<User> {
+  static async register(username: string, password: string): Promise<IUser> {
 
-    const existingUser = users.find((u) => u.username === username);
+    const existingUser = await userModel.findOne({username: username});
     if (existingUser) {
       throw new Error("Username already exists");
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser: User = {
-      _id: (nextId++).toString(),
-      username,
-      password: hashedPassword,
-    };
-
-    users.push(newUser);
+    const newUser: IUser = await userModel.create({username, password: hashedPassword});
     return newUser;
+
   }
 
-  static async validateUser(username: string, password: string): Promise<User> {
-    const user = users.find((u) => u.username === username);
+  static async validateUser(username: string, password: string): Promise<IUser> {
+    
+    const user: IUser | null = await userModel.findOne({username: username});
     if (!user) {
       throw new Error("User not found");
     }
 
-    const isValid = await bcrypt.compare(password, user.password);
+    const isValid: boolean = await bcrypt.compare(password, user.password);
     if (!isValid) {
       throw new Error("Invalid password");
     }

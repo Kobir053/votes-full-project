@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import { config } from './config';
 import authRouter from './routes/auth.routes';
+import candidateRouter from './routes/candidateRoutes';
 import connectDB from './db/db';
 
 const app = express();
@@ -10,15 +11,19 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({
-  origin: 'http://localhost:5173', // Vite default port
-  credentials: true // Required for cookies
-}));
+app.use(cors(
+  // {
+  // origin: 'http://localhost:5173', // Vite default port
+  // credentials: true // Required for cookies
+  // }
+));
 
 connectDB();
 
 // Routes
-app.use('/api/auth', authRouter);
+app.use('/api', authRouter);
+
+app.use('/api/candidates', candidateRouter);
 
 // Basic error handling
 app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
