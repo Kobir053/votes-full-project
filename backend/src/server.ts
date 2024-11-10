@@ -4,6 +4,7 @@ import cors from 'cors';
 import { config } from './config';
 import authRouter from './routes/auth.routes';
 import candidateRouter from './routes/candidateRoutes';
+import userRouter from './routes/userRoutes';
 import connectDB from './db/db';
 
 const app = express();
@@ -24,6 +25,8 @@ connectDB();
 app.use('/api', authRouter);
 
 app.use('/api/candidates', candidateRouter);
+
+app.use('/api/users', userRouter);
 
 // Basic error handling
 app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
