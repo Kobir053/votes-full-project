@@ -2,20 +2,20 @@ import React from 'react';
 import './errorModal.css';
 
 interface ErrorModalProps {
-    text: string;
-    setModal: (modal: boolean) => void;
+    message: string;
+    setShowModal: (modal: boolean) => void;
 }
 
-const ErrorModal: React.FC<ErrorModalProps> = ({ text, setModal }) => {
+const ErrorModal: React.FC<ErrorModalProps> = ({ message, setShowModal }) => {
 
     setTimeout(() => {
-        setModal(false);
+        setShowModal(false);
     }, 3000);
 
   return (
     <div className='error-modal'>
         <div className='info'>
-            {text}
+            {message}
         </div>
     </div>
   )

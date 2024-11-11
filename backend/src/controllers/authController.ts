@@ -26,14 +26,20 @@ export const handleLogin = async (req: Request, res: Response, next: NextFunctio
       const user = await AuthService.validateUser(username, password);
   
       const token = jwt.sign(
-        { userId: user._id, username: user.username },
+        { userId: user._id, isAdmin: user.isAdmin },
         config.JWT_SECRET,
         { expiresIn: '24h' }
       );
+
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 3600000
+      });
   
       res.json({token: token });
     } 
     catch (error: any) {
-      res.status(401).json({ message: 'Invalid credentials ' + error.message });
+      next(error);
     }
 }
