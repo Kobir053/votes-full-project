@@ -3,14 +3,13 @@ import './errorModal.css';
 
 interface ErrorModalProps {
     message: string;
-    setShowModal: (modal: boolean) => void;
 }
 
-const ErrorModal: React.FC<ErrorModalProps> = ({ message, setShowModal }) => {
+const ErrorModal: React.FC<ErrorModalProps> = ({ message }) => {
 
-    setTimeout(() => {
-        setShowModal(false);
-    }, 3000);
+    // setTimeout(() => {
+    //     setShowModal(false);
+    // }, 3000);
 
   return (
     <div className='error-modal'>
