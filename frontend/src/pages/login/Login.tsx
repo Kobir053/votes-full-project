@@ -1,13 +1,12 @@
 import React from 'react';
 import axios from "axios";
 import useForm from '../../customHooks/useForm';
-import ErrorModal from '../../components/modal/ErrorModal';
 
-interface BBB{
+interface LoginProps{
     setModal: (modal: boolean) => void;
 }
 
-const Login: React.FC<BBB> = ({setModal}) => {
+const Login: React.FC<LoginProps> = ({setModal}) => {
 
     const onSubmit = async() => {
         try {
