@@ -1,64 +1,68 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import useForm from '../../customHooks/useForm';
 import ErrorModal from '../../components/modal/ErrorModal';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Spinner from '../../components/spinner/Spinner';
+import { AppDispatch, RootState } from '../../store/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser, setError } from '../../store/features/userSlice';
 
 const Login: React.FC = () => {
 
+    const formHook = useForm({ username: "", password: "" }, onSubmit);
+
+    const nev = useNavigate();
+
     const [showModal, setShowModal] = useState<boolean>(false);
-    const [errorMessage, setErrorMessage] = useState<string>('');
+    // const [errorMessage, setErrorMessage] = useState<string>('');
 
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    // const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const onSubmit = async() => {
-        setIsLoading(true);
+    const dispatch: AppDispatch = useDispatch<AppDispatch>();
+    const { error, user, errorMessage, isLoading, token } = useSelector((state: RootState) => state.user);
+
+    // const handleError = (text: string) => {
+    //     setError({error: true, errorMessage: text});
+    //     // setShowModal(true);
+    //     // setIsLoading(false);
+    //     setTimeout(() => {
+    //         setError({error: false, errorMessage: null});
+    //         console.log(error);
+    //     }, 3000);
+    // }
+
+    async function onSubmit() {
         try {
-            const response = await axios.post("http://localhost:3001/api/login", {...formHook.formValues});
-            if(!response){
-                setShowModal(true);
-                setErrorMessage("could not login during a temperary problem, please try again and make sure you're doing everything correctly");
-                setIsLoading(false);
-                setTimeout(() => {
-                    setShowModal(false);
-                }, 3000);
-                throw new Error("failed in http request to login");
-            }
-            console.log(response.data);
-            setIsLoading(false);
-            return response.data;
-        } 
+            dispatch(loginUser(formHook.formValues as { username: string, password: string }));
+        }
         catch (error: any) {
             const message: string = "could not login during a temperary problem, please try again and make sure you're connecting to network";
-            setErrorMessage(message);
-            setShowModal(true);
-            setIsLoading(false);
-            setTimeout(() => {
-                setShowModal(false);
-            }, 3000);
+            // handleError(message);
             console.error(error.message);
         }
     }
-
-    const formHook = useForm({username: "", password: ""}, onSubmit);
-
+    
+    useEffect(() => {
+        if (token)
+            nev("/vote");
+    }, [token])
 
     return (
         <div className='login'>
             {
-            isLoading? <Spinner/>: <div><form onSubmit={formHook.handleSubmit}>
-                <label>Username</label>
-                <input type="text" name='username' onChange={formHook.handleChange}/>
-                <label>Password</label>
-                <input type="text" name='password' onChange={formHook.handleChange}/>
-                <button type='submit'>Login</button>
+                isLoading ? <Spinner /> : <div><form onSubmit={formHook.handleSubmit}>
+                    <label>Username</label>
+                    <input type="text" name='username' onChange={formHook.handleChange} />
+                    <label>Password</label>
+                    <input type="password" name='password' onChange={formHook.handleChange} />
+                    <button type='submit'>Login</button>
                 </form>
-                <h3>Don't have an account?</h3>
-                <Link to="/register"><span style={{textDecoration: "underline"}}>Sign Up</span></Link></div>
+                    <h3>Don't have an account?</h3>
+                    <Link to="/register"><span style={{ textDecoration: "underline" }}>Sign Up</span></Link></div>
             }
-            
-            {showModal && <ErrorModal message={errorMessage}/>}
+            <p>{user.username}</p>
+            {error == true && <ErrorModal message={errorMessage!}/>}
         </div>
     )
 }

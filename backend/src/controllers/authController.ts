@@ -37,7 +37,7 @@ export const handleLogin = async (req: Request, res: Response, next: NextFunctio
         maxAge: 3600000
       });
   
-      res.json({token: token });
+      res.json({token: token, user: user });
     } 
     catch (error: any) {
       next(error);

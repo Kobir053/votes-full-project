@@ -26,7 +26,7 @@ const Signup: React.FC = () => {
             <label>Username</label>
             <input type="text" name='username' onChange={formHook.handleChange}/>
             <label>Password</label>
-            <input type="text" name='password' onChange={formHook.handleChange}/>
+            <input type="password" name='password' onChange={formHook.handleChange}/>
             <button type='submit'>Sign Up</button>
         </form>
     </div>

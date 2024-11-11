@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './errorModal.css';
+import { setError } from '../../store/features/userSlice';
+import { RootState } from '../../store/store';
+import { useSelector } from 'react-redux';
 
 interface ErrorModalProps {
     message: string;
@@ -7,12 +10,10 @@ interface ErrorModalProps {
 
 const ErrorModal: React.FC<ErrorModalProps> = ({ message }) => {
 
-    // setTimeout(() => {
-    //     setShowModal(false);
-    // }, 3000);
+    const {error} = useSelector((state: RootState) => state.user);
 
   return (
-    <div className='error-modal'>
+     error && <div className='error-modal'>
         <div className='info'>
             {message}
         </div>

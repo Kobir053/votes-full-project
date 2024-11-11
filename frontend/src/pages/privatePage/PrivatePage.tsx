@@ -1,6 +1,5 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { setModalDetails } from "../../store/features/modalSlice";
 import ErrorModal from "../../components/modal/ErrorModal";
 
 interface PrivatePageProps{
@@ -15,7 +14,7 @@ const PrivatePage: React.FC<PrivatePageProps> = ({children}) => {
     const nev = useNavigate();
 
     const ifUserHaveToken = () => {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("myUserToken");
         if(!token){
             const errorMessage: string = "you didn't logged in, please do it!";
             setMessage(errorMessage);
