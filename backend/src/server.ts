@@ -6,6 +6,9 @@ import authRouter from './routes/auth.routes';
 import candidateRouter from './routes/candidateRoutes';
 import userRouter from './routes/userRoutes';
 import connectDB from './db/db';
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 

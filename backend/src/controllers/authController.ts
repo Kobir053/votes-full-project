@@ -31,11 +31,14 @@ export const handleLogin = async (req: Request, res: Response, next: NextFunctio
         { expiresIn: '24h' }
       );
 
-      res.cookie("token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        maxAge: 3600000
-      });
+      console.log(config.JWT_SECRET);
+      
+
+      // res.cookie("token", token, {
+      //   httpOnly: true,
+      //   secure: process.env.NODE_ENV === "production",
+      //   maxAge: 3600000
+      // });
   
       res.json({token: token, user: user });
     } 

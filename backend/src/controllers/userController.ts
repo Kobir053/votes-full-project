@@ -28,6 +28,7 @@ export const updateVote = async (req: Request, res: Response, next: NextFunction
             return;
         }
         const updatedUser = await userModel.findByIdAndUpdate(userId, {votedFor: canidateId, hasVoted: true}, {new: true});
+        await candidateModel.findByIdAndUpdate(canidateId, {votes: candidate.votes + 1});
         res.status(200).json({success: true, updatedUser});
     } 
     catch (error: any) {
