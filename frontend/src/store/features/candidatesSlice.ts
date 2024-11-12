@@ -1,8 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { objectID } from "../../../../backend/src/models/userModel";
+import { IUser, objectID } from "../../../../backend/src/models/userModel";
 import axios from "axios";
-import { useSelector } from "react-redux";
-import { RootState } from "../store";
+
+// interface ResponseForCandidateFromAPI {
+//     success: boolean;
+//     updatedUser: IUser;
+//     candidates: ICandidate[];
+// }
 
 export interface ICandidate {
     _id?: objectID;
@@ -37,6 +41,13 @@ export const fetchCandidates = createAsyncThunk("candidates/fetchCandidates", as
     return response.data.candidates;
 });
 
+export const updateVote = createAsyncThunk("candidates/updateVote", async (data: {id: objectID, candidateId: objectID}) => {
+    const token = JSON.parse(localStorage.getItem("myUserToken")!);
+    const response = await axios.put(`${BASE_URL}/users/${data.id}`, {votedFor: data.candidateId}, {headers: {Authorization: `Bearer ${token}`},});
+    console.log(response.data);
+    return response.data;
+});
+
 const candidatesSlice = createSlice({
     name: "candidates",
     initialState,
@@ -51,6 +62,7 @@ const candidatesSlice = createSlice({
         .addCase(fetchCandidates.rejected, (state, action) => {
             state.isLoading = false;
             state.error = true;
+            console.log(action.error);
             state.errorMessage = action.error.message!;
         })
         .addCase(fetchCandidates.fulfilled, (state, action) => {
@@ -58,6 +70,22 @@ const candidatesSlice = createSlice({
             state.errorMessage = null;
             state.isLoading = false;
             state.candidates = action.payload;
+        })
+        .addCase(updateVote.pending, (state) => {
+            state.isLoading = true;
+            state.error = false;
+            state.errorMessage = null;
+        })
+        .addCase(updateVote.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = true;
+            state.errorMessage = action.payload as string;
+        })
+        .addCase(updateVote.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.error = false;
+            state.errorMessage = null;
+            (state.candidates as ICandidate[]) = action.payload.candidates;
         })
     },
 });

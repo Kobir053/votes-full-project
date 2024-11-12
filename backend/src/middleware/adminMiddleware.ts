@@ -13,6 +13,7 @@ export const isAdminMiddleware = (req: Request, res: Response, next: NextFunctio
     }
   } 
   catch (error) {
+    console.log("error while checking if is admin");
     res.status(401).json({ message: 'Invalid token' });
     return;
   }

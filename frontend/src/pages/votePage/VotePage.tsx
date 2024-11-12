@@ -6,6 +6,8 @@ import { logout } from '../../store/features/userSlice';
 import { useNavigate } from 'react-router';
 import { fetchCandidates, ICandidate } from '../../store/features/candidatesSlice';
 import Spinner from '../../components/spinner/Spinner';
+import CandidateCard from '../../components/candidateCard/CandidateCard';
+import './votePage.css';
 
 const VotePage: React.FC = () => {
 
@@ -22,9 +24,20 @@ const VotePage: React.FC = () => {
     const renderCandidates = () => {
         if(candidates.length == 0) return;
         return candidates.map((c: ICandidate) => {
-            return <div>{c.name}</div>
+            return <CandidateCard candidate={c}/>
         });
     }
+
+    // const [showModal, setShowModal] = useState<boolean>(false);
+    // const [message, setMessage] = useState<string>('');
+
+    // const handleError = () => {
+    //     setShowModal(true);
+    //     setMessage(errorMessage!);
+    //     setTimeout(() => {
+    //         setShowModal(false);
+    //     }, 3000);
+    // }
 
     const {error, errorMessage, candidates, isLoading} = useSelector((state: RootState) => state.candidates);
 
@@ -34,14 +47,21 @@ const VotePage: React.FC = () => {
         dispatch(fetchCandidates());
     }, []);
 
+    // useEffect(() => {
+    //     if(error)
+    //         handleError();
+    // }, [error]);
+
   return (
     <div className='vote-page'>
-        {user.isAdmin ? <Navbar/>: <button onClick={handleLogout}>Logout</button>}
+        <div className='vote-page-navbar'>{user.isAdmin ? <Navbar/>: <button onClick={handleLogout}>Logout</button>}</div>
         {
             isLoading? 
             <Spinner/>: 
-            <div>
-                {renderCandidates()}
+            <div className='candidates-container'>
+                <div className='all-candidates'>
+                    {renderCandidates()}
+                </div>
             </div>
         }
     </div>
