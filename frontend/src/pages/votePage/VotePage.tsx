@@ -28,29 +28,13 @@ const VotePage: React.FC = () => {
         });
     }
 
-    // const [showModal, setShowModal] = useState<boolean>(false);
-    // const [message, setMessage] = useState<string>('');
-
-    // const handleError = () => {
-    //     setShowModal(true);
-    //     setMessage(errorMessage!);
-    //     setTimeout(() => {
-    //         setShowModal(false);
-    //     }, 3000);
-    // }
-
-    const {error, errorMessage, candidates, isLoading} = useSelector((state: RootState) => state.candidates);
+    const { candidates, isLoading} = useSelector((state: RootState) => state.candidates);
 
     const dispatch: AppDispatch = useDispatch<AppDispatch>();
 
     useEffect(() => {
         dispatch(fetchCandidates());
     }, []);
-
-    // useEffect(() => {
-    //     if(error)
-    //         handleError();
-    // }, [error]);
 
   return (
     <div className='vote-page'>

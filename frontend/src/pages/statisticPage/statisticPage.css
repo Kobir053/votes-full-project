@@ -1,0 +1,51 @@
+.statistic-page{
+    min-height: 100vh;
+    min-width: 90vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    gap: 20px;
+}
+
+.statistic-page .table-of-users{
+    height: 40vh;
+    width: 50vw;
+    display: flex;
+    flex-direction: column;
+    border-radius: 4px;
+    background-color: rgba(128, 21, 21, 0.427);
+    overflow-y: scroll;
+    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.456); */
+}
+
+.statistic-page .table-of-users .user-in-table{
+    width: 100%;
+    height: auto;
+    padding: 5px 0px;
+    object-fit: contain;
+    display: flex;
+    justify-content: space-around;
+    /* box-shadow: 0 0 5px rgba(128, 21, 21, 0.427); */
+    border-bottom: 1px solid rgba(0, 0, 255, 0.184);
+}
+
+.statistic-page .statistic-of-votes{
+    background-color: orange;
+    height: 40vh;
+    width: 70vw;
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    border: 1px solid black;
+    position: relative;
+    padding: 10px 0px;
+}
+
+.statistic-page .statistic-of-votes .stats{
+    position: absolute;
+    text-align: center;
+    bottom: 0px;
+    align-content: end;
+    padding: 0px 10px;
+}

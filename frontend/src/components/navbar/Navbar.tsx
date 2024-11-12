@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
+import './navbar.css';
 
 const Navbar: React.FC = () => {
 
@@ -12,8 +13,8 @@ const Navbar: React.FC = () => {
 
   return (
     <div className='navbar'>
-        <button onClick={logout}>LogOut</button>
-        <button>Statistic Page</button>
+        <button onClick={logout}>Log Out</button>
+        <button onClick={() => nev("/statistic")}>Statistic Page</button>
     </div>
   )
 }

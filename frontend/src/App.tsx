@@ -4,6 +4,8 @@ import Login from "./pages/login/Login";
 import Signup from "./pages/register/Signup";
 import PrivatePage from "./pages/privatePage/PrivatePage";
 import VotePage from "./pages/votePage/VotePage";
+import AdminPage from "./pages/adminPage/AdminPage";
+import StatisticPage from "./pages/statisticPage/StatisticPage";
 
 function App() {
 
@@ -14,6 +16,7 @@ function App() {
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Signup/>}/>
         <Route path="/vote" element={<PrivatePage><VotePage/></PrivatePage>}/>
+        <Route path="/statistic" element={<PrivatePage><AdminPage><StatisticPage/></AdminPage></PrivatePage>}/>
       </Routes>
     </div>
   )

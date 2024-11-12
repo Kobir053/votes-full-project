@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { objectID} from '../../../../backend/src/models/userModel';
+import { IUser, objectID} from '../../../../backend/src/models/userModel';
 import axios from "axios";
 
 interface ResponseOfAPI {
@@ -22,6 +22,7 @@ interface UserStateType {
     error: boolean;
     errorMessage: string | null;
     token: string | null;
+    allUsers: IUser[] | null;
 }
 
 const BASE_URL: string = "http://localhost:3001/api";
@@ -38,6 +39,13 @@ export const loginUser = createAsyncThunk("user/loginUser", async (userData: {us
     return response.data;
 });
 
+export const fetchAllUsers = createAsyncThunk("user/fetchAllUsers", async () => {
+    const token = JSON.parse(localStorage.getItem("myUserToken")!);
+    const response = await axios.get(`${BASE_URL}/users`, {headers: {Authorization: `Bearer ${token}`}});
+    console.log(response.data);
+    return response.data;
+});
+
 const initialState: UserStateType = {
     user: {
         username: "", password: "", hasVoted: false, votedFor: null, isAdmin: false
@@ -45,18 +53,21 @@ const initialState: UserStateType = {
     error: false,
     errorMessage: null,
     isLoading: false,
-    token: null
+    token: null,
+    allUsers: null
 };
 
 const userSlice = createSlice({
     name: "user",
     initialState,
     reducers: {
-        setVote: (state, action: PayloadAction<{votedFor: keyof UserType["votedFor"]}>) => {
-            state.user.votedFor = action.payload.votedFor;
+        setVote: (state, action: PayloadAction<objectID>) => {
+            (state.user.votedFor as objectID) = action.payload;
+            state.user.hasVoted = true;
         },
         removeVote: (state) => {
             state.user.votedFor = null;
+            state.user.hasVoted = false;
         },
         setError: (state, action: PayloadAction<string | null>) => {
             state.error = false;
@@ -102,6 +113,24 @@ const userSlice = createSlice({
             state.errorMessage = null;
             (state.user as UserType) = action.payload.user;
             state.token = action.payload.token;
+        })
+        .addCase(fetchAllUsers.pending, (state) => {
+            state.error = false;
+            state.errorMessage = null;
+            state.isLoading = true;
+            state.allUsers = null;
+        })
+        .addCase(fetchAllUsers.rejected, (state, action) => {
+            state.error = true;
+            state.errorMessage = action.error as string;
+            state.isLoading = false;
+            state.allUsers = null;
+        })
+        .addCase(fetchAllUsers.fulfilled, (state, action) => {
+            state.error = false;
+            state.errorMessage = null;
+            state.isLoading = false;
+            state.allUsers = action.payload.users;
         })
     },
 });

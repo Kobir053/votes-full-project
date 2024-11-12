@@ -7,15 +7,25 @@
 }
 
 .vote-page-navbar{
-    height: 10%;
+    height: 5vh;
     width: 100%;
-    position: relative;
+    background-color: rgba(0, 0, 0, 0.79);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.vote-page-navbar *{
-    position: absolute;
-    top: 0px;
-    right: 0px;
+.vote-page-navbar button{
+    background-color: rgba(255, 255, 255, 0.803);
+    color: black;
+    border: none;
+    border-radius: 5px;
+    padding: 4px 8px;
+}
+
+.vote-page-navbar button:hover{
+    transform: scale(0.97);
+    transition: 0.2s linear all;
 }
 
 .vote-page .candidates-container{
