@@ -13,6 +13,7 @@ const Navbar: React.FC = () => {
   return (
     <div className='navbar'>
         <button onClick={logout}>LogOut</button>
+        <button>Statistic Page</button>
     </div>
   )
 }

@@ -19,8 +19,7 @@ const VotePage: React.FC = () => {
 
   return (
     <div className='vote-page'>
-        {user.isAdmin && <Navbar/>}
-        <button onClick={handleLogout}>Logout</button>
+        {user.isAdmin ? <Navbar/>: <button onClick={handleLogout}>Logout</button>}
         <p>Vote Page</p>
     </div>
   )

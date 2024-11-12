@@ -1,6 +1,8 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import ErrorModal from "../../components/modal/ErrorModal";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 
 interface PrivatePageProps{
     children: ReactNode,
@@ -11,12 +13,13 @@ const PrivatePage: React.FC<PrivatePageProps> = ({children}) => {
     const [showError, setShowError] = useState<boolean>(false);
     const [message, setMessage] = useState<string>('');
 
+    const token = useSelector((state: RootState) => state.user.token);
+
     const nev = useNavigate();
 
     const ifUserHaveToken = () => {
-        const token = localStorage.getItem("myUserToken");
         if(!token){
-            const errorMessage: string = "you didn't logged in, please do it!";
+            const errorMessage: string = "you need to log in again please";
             setMessage(errorMessage);
             setShowError(true);
             setTimeout(() => {

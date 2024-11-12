@@ -24,13 +24,15 @@ interface UserStateType {
     token: string | null;
 }
 
+const BASE_URL: string = "http://localhost:3001/api";
+
 export const registerUser = createAsyncThunk("user/registerUser", async (userData: {username: string, password: string}) => {
-    const response = await axios.post("http://localhost:3001/api/register", userData);
+    const response = await axios.post(`${BASE_URL}/register`, userData);
     console.log(response.data);
 });
 
 export const loginUser = createAsyncThunk("user/loginUser", async (userData: {username: string, password: string}): Promise<ResponseOfAPI> => {
-    const response = await axios.post("http://localhost:3001/api/login", userData);
+    const response = await axios.post(`${BASE_URL}/login`, userData);
     console.log(response.data);
     localStorage.setItem("myUserToken", JSON.stringify(response.data.token));
     return response.data;
@@ -75,7 +77,7 @@ const userSlice = createSlice({
         .addCase(registerUser.rejected, (state) => {
             state.isLoading = false;
             state.error = true;
-            state.errorMessage = "could not registered";
+            state.errorMessage = "could not registered, please make sure to enter your details correctly";
         })
         .addCase(registerUser.fulfilled, (state) => {
             state.isLoading = false;
@@ -90,7 +92,7 @@ const userSlice = createSlice({
         .addCase(loginUser.rejected, (state) => {
             state.isLoading = false;
             state.error = true;
-            state.errorMessage = "could not log in";
+            state.errorMessage = "could not log in, please make sure to enter your details correctly";
             (state.user as UserType) = initialState.user;
             console.log("login rejected");
         })
