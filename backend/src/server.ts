@@ -7,20 +7,21 @@ import candidateRouter from './routes/candidateRoutes';
 import userRouter from './routes/userRoutes';
 import connectDB from './db/db';
 import dotenv from "dotenv";
+import { createServer } from 'http';
+import { initializeSocketServer } from './socketServer';
 
 dotenv.config();
 
 const app = express();
 
+const httpServer = createServer(app);
+export const io = initializeSocketServer(httpServer);
+
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors(
-  // {
-  // origin: 'http://localhost:5173', // Vite default port
-  // credentials: true // Required for cookies
-  // }
-));
+app.use(cors());
+
 
 connectDB();
 
@@ -37,6 +38,6 @@ app.use((err: Error, req: express.Request, res: express.Response, next: express.
   res.status(500).json({ message: 'Something went wrong!' });
 });
 
-app.listen(config.PORT, () => {
+httpServer.listen(config.PORT, () => {
   console.log(`Server is running on port ${config.PORT}`);
 });

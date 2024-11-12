@@ -1,12 +1,6 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { IUser, objectID } from "../../../../backend/src/models/userModel";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { objectID } from "../../../../backend/src/models/userModel";
 import axios from "axios";
-
-// interface ResponseForCandidateFromAPI {
-//     success: boolean;
-//     updatedUser: IUser;
-//     candidates: ICandidate[];
-// }
 
 export interface ICandidate {
     _id?: objectID;
@@ -51,7 +45,16 @@ export const updateVote = createAsyncThunk("candidates/updateVote", async (data:
 const candidatesSlice = createSlice({
     name: "candidates",
     initialState,
-    reducers: {},
+    reducers: {
+        setCandidates: (state, action) => {
+            state.candidates = action.payload;
+        },
+        removeVoteFromCandidate: (state, action: PayloadAction<objectID>) => {
+            let index = state.candidates.findIndex((c: ICandidate) => c._id == action.payload);
+            if(state.candidates[index].votes != 0)
+                state.candidates[index].votes -= 1; 
+        }
+    },
     extraReducers(builder) {
         builder
         .addCase(fetchCandidates.pending, (state) => {
@@ -89,5 +92,7 @@ const candidatesSlice = createSlice({
         })
     },
 });
+
+export const {setCandidates, removeVoteFromCandidate} = candidatesSlice.actions;
 
 export default candidatesSlice.reducer;

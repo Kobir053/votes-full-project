@@ -1,5 +1,5 @@
 import React from 'react';
-import { ICandidate, updateVote } from '../../store/features/candidatesSlice';
+import { ICandidate, removeVoteFromCandidate, updateVote } from '../../store/features/candidatesSlice';
 import './candidateCard.css';
 import { AppDispatch, RootState } from '../../store/store';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,9 +15,11 @@ const CandidateCard: React.FC<CandidateCardProps> = ({candidate}) => {
 
     const dispatch: AppDispatch = useDispatch<AppDispatch>();
 
-    const handleVote = () => {
-        if(user.hasVoted){
+    const handleVote = (btnText: string) => {
+        if(btnText == "Cancel Vote"){
+            console.log("canceling the vote");
             dispatch(removeVote());
+            dispatch(removeVoteFromCandidate(user.votedFor!));
             return;
         }
         const data = {id: user._id!, candidateId: candidate._id!}
@@ -30,7 +32,7 @@ const CandidateCard: React.FC<CandidateCardProps> = ({candidate}) => {
         <p>Votes: {candidate.votes}</p>
         <h3>{candidate.name}</h3>
         <img src={candidate.image} alt={candidate.name}/>
-        <button onClick={handleVote}>{user.hasVoted? "Cancel Vote": "Vote"}</button>
+        <button onClick={(e) => {handleVote(e.currentTarget.textContent as string)}}>{user.hasVoted? "Cancel Vote": "Vote"}</button>
     </div>
   )
 }

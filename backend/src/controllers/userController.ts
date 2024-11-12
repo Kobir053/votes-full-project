@@ -1,6 +1,7 @@
 import { Response, Request, NextFunction } from "express";
 import userModel, { IUser } from "../models/userModel";
 import candidateModel from "../models/candidateModel";
+import { io } from "../server";
 
 export const getUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
@@ -30,6 +31,7 @@ export const updateVote = async (req: Request, res: Response, next: NextFunction
         }
 
         const user = await userModel.findById(userId);
+        console.log(user?.hasVoted, user!.username);
         if(!user){
             res.status(404).json({message: "user didn't found"});
             return;
@@ -37,12 +39,17 @@ export const updateVote = async (req: Request, res: Response, next: NextFunction
 
         if(user.hasVoted){
             const candidateForRemoveVote = await candidateModel.findById(user.votedFor);
-            await candidateModel.findByIdAndUpdate(user.votedFor, {votes: candidateForRemoveVote!.votes - 1});
+            if(candidateForRemoveVote!.votes != 0)
+                await candidateForRemoveVote?.updateOne({votes:candidateForRemoveVote.votes -1});
+                await candidateForRemoveVote?.save();  
         }
 
+        const candidateAfterUpdate = await candidateModel.findById(canidateId);
+
         const updatedUser = await userModel.findByIdAndUpdate(userId, {votedFor: canidateId, hasVoted: true}, {new: true});
-        await candidateModel.findByIdAndUpdate(canidateId, {votes: candidate.votes + 1});
+        await candidateModel.findByIdAndUpdate(canidateId, {votes: candidateAfterUpdate!.votes + 1});
         const updatedCandidates = await candidateModel.find();
+        io.emit("updated-votes", updatedCandidates);
         res.status(200).json({success: true, updatedUser, candidates: updatedCandidates});
     } 
     catch (error: any) {
